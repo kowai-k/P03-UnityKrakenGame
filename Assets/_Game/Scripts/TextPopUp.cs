@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+
 public class TextPopUp : MonoBehaviour
 {
-    //add headers, explainations too
+    //Connections are done here
     [Header("Connections SetUp")]
 
     [SerializeField] 
@@ -18,37 +19,42 @@ public class TextPopUp : MonoBehaviour
 
     [SerializeField] [Tooltip("Connect to the image canvas component")] GameObject _imageCanvas;
     
+    //Customizable attributes
     [Header("Customizations")]
     [SerializeField] [Tooltip("This will be the text displayed when you enter the detection range")] [TextArea()] string _textToDisplay;
+
     [SerializeField] [Tooltip("This is how long the text will appear for before going away")] int _secondsToDisplay = 3;
     
     [SerializeField] [Tooltip("Distance the target can be detected from")] [Range(0,100)] private float _range = 2.5f;
-   
-    //make these two unchangable
+
+    //Audio Source
+    //[Header("Audio")]
+   // [SerializeField] [Tooltip("Audio clip that plays when target is detected")] AudioSource _audioToPlay;
     
 
     void Start()
     {
         _textCanvas.SetActive (false);
         _imageCanvas.SetActive (false);
-
         _textConnection.text = _textToDisplay;
     }
 
 
     private void OnDrawGizmosSelected()
     {
+        //shows user the range 
         Gizmos.DrawWireSphere(transform.position, _range);
     }
 
-    void FixedUpdate()
+    void Update()
     {
 
         if (Vector3.Distance(target.position, transform.position) <= _range)
         {
+            //OnEnter.Invoke();
             _textConnection.text = _textToDisplay;
             Debug.Log("Player is within range");
-
+            //AudioPlayer();
             StartCoroutine(TextPopsUp());
         }
     }
@@ -57,8 +63,18 @@ public class TextPopUp : MonoBehaviour
     {
         _textCanvas.SetActive(true);
         _imageCanvas.SetActive(true);
+        //AudioPlayer();
         yield return new WaitForSeconds(_secondsToDisplay);
         _textCanvas.SetActive(false);
         _imageCanvas.SetActive(false);
     }
+
+    /*
+    private void AudioPlayer()
+    {
+        AudioSource newSound = Instantiate(_audioToPlay, transform.position, Quaternion.identity);
+        Destroy(newSound.gameObject, newSound.clip.length);
+        //DestroyImmediate(_audioToPlay, true);
+    }
+    */
 }
