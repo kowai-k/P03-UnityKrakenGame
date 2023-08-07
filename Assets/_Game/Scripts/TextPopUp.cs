@@ -27,10 +27,7 @@ public class TextPopUp : MonoBehaviour
     
     [SerializeField] [Tooltip("Distance the target can be detected from")] [Range(0,100)] private float _range = 2.5f;
 
-    //Audio Source
-    //[Header("Audio")]
-   // [SerializeField] [Tooltip("Audio clip that plays when target is detected")] AudioSource _audioToPlay;
-    
+  
 
     void Start()
     {
@@ -51,10 +48,8 @@ public class TextPopUp : MonoBehaviour
 
         if (Vector3.Distance(target.position, transform.position) <= _range)
         {
-            //OnEnter.Invoke();
             _textConnection.text = _textToDisplay;
             Debug.Log("Player is within range");
-            //AudioPlayer();
             StartCoroutine(TextPopsUp());
         }
     }
@@ -63,18 +58,9 @@ public class TextPopUp : MonoBehaviour
     {
         _textCanvas.SetActive(true);
         _imageCanvas.SetActive(true);
-        //AudioPlayer();
         yield return new WaitForSeconds(_secondsToDisplay);
         _textCanvas.SetActive(false);
         _imageCanvas.SetActive(false);
     }
 
-    /*
-    private void AudioPlayer()
-    {
-        AudioSource newSound = Instantiate(_audioToPlay, transform.position, Quaternion.identity);
-        Destroy(newSound.gameObject, newSound.clip.length);
-        //DestroyImmediate(_audioToPlay, true);
-    }
-    */
 }
